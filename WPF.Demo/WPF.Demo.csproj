@@ -8,4 +8,12 @@
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Prism.Wpf" Version="8.1.97" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WPF.Common.Mvvm\WPF.Common.Mvvm.csproj" />
+  </ItemGroup>
+
 </Project>

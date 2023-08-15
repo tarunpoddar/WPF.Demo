@@ -7,13 +7,132 @@
         mc:Ignorable="d"
         Title="ERP Software" 
         Height="450" 
-        Width="800" 
-        WindowState="Maximized"
+        Width="500" 
         WindowStartupLocation="CenterScreen">
+
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
-    <Grid>
 
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <Menu>
+            <MenuItem Header="Read"
+                  x:Name="ReadMenuItem"
+                  AutomationProperties.AutomationId="ReadMenuItem"
+                  Command="{Binding ReadCommand}">
+            </MenuItem>
+            <MenuItem Header="Create"
+                  x:Name="CreateMenuItem"
+                  AutomationProperties.AutomationId="CreateMenuItem"
+                  Command="{Binding CreateCommand}">
+            </MenuItem>
+            <MenuItem Header="Update"
+                  x:Name="UpdateMenuItem"
+                  AutomationProperties.AutomationId="UpdateMenuItem"
+                  Command="{Binding UpdateCommand}">
+            </MenuItem>
+            <MenuItem Header="Delete"
+                  x:Name="DeleteMenuItem"
+                  AutomationProperties.AutomationId="DeleteMenuItem"
+                  Command="{Binding DeleteCommand}">
+            </MenuItem>
+        </Menu>
+        <ScrollViewer Grid.Row="1" 
+                      HorizontalScrollBarVisibility="Disabled">
+            <Grid Margin="5" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.ColumnSpan="2"
+                           HorizontalAlignment="Center"
+                           Text="Biller Registration"/>
+                <TextBlock Grid.Column="0"
+                           Grid.Row="1"
+                           HorizontalAlignment="Center"
+                           Text="Name"/>
+                <TextBox Grid.Column="1"
+                         Grid.Row="1"
+                         Margin="5" 
+                         Width="auto"/>
+                <TextBlock Grid.Column="0"
+                           Grid.Row="2"
+                           HorizontalAlignment="Center"
+                           Text="Gender"/>
+                <ComboBox Grid.Column="1"
+                         Grid.Row="2"
+                         Margin="5" 
+                         Width="auto"/>
+                <TextBlock Grid.Column="0"
+                           Grid.Row="3"
+                           HorizontalAlignment="Center"
+                           Text="Product"/>
+                <StackPanel Grid.Column="1"
+                            Grid.Row="3">
+                    <TextBox x:Name="ProductSearchTextBox" 
+                             Margin="5"/>
+                    <Popup x:Name="ProductSearchPopup" 
+                           IsOpen="False">
+                        <ListBox x:Name="ProductSearchListBox" />
+                    </Popup>
+                </StackPanel>
+                <TextBlock Grid.Column="0"
+                           Grid.Row="4"
+                           HorizontalAlignment="Center"
+                           Text="Quantity"/>
+                <StackPanel Grid.Column="1"
+                            Grid.Row="4"
+                            Orientation="Horizontal"
+                            Margin="5">
+                    <Button Content="  -  "/>
+                    <TextBox Width="30"/>
+                    <Button Content=" + "/>
+                </StackPanel>
+                <TextBlock Grid.Column="0"
+                           Grid.Row="5"
+                           HorizontalAlignment="Center"
+                           Text="Mode of Payment"/>
+                <StackPanel Grid.Column="1"
+                             Grid.Row="5"
+                             Orientation="Horizontal">
+                    <RadioButton 
+                             Margin="5"
+                             Content="Online"/>
+                    <RadioButton Grid.Column="1"
+                            Margin="5"
+                            Content="Cash"/>
+                </StackPanel>
+                <TextBlock Grid.Column="0"
+                           Grid.Row="6"
+                           HorizontalAlignment="Center"
+                           Text="Date of Purchase"/>
+                <DatePicker Grid.Row="6" 
+                            Grid.Column="1"
+                            Margin="5" 
+                            SelectedDate="{Binding Employee.DateOfBirth}"/>
+
+            </Grid>
+        </ScrollViewer>
+        <Button Grid.Row="2" 
+                Height="35" 
+                Width="50" 
+                Margin="10" 
+                VerticalAlignment="Top" 
+                Content="Submit"/>
     </Grid>
 </Window>
