@@ -3,6 +3,9 @@ using System.Runtime.CompilerServices;
 
 namespace WPF.Common.Mvvm
 {
+    /// <summary>
+    /// Observable object which implements <see cref="INotifyPropertyChanged"/> interface.
+    /// </summary>
     public class ObservableObject : INotifyPropertyChanged
     {
         /// <summary>

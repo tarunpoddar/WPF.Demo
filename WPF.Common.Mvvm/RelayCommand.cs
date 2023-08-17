@@ -1,68 +1,76 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 
 namespace WPF.Common.Mvvm
 {
+    /// <summary>
+    /// Implementation of relay command. 
+    /// </summary>
     public class RelayCommand : ICommand
     {
         public event EventHandler? CanExecuteChanged;
-        private readonly Action<object>? action;
-        private readonly Predicate<object>? canExecute;
-        private Action<string> selectSuggestion;
+        private readonly Action<object>? myAction;
+        private readonly Predicate<object>? myCanExecute;
 
-        public RelayCommand(Action action, Func<bool>? canExecute = null)
+        public RelayCommand(Action theAction, Func<bool>? theCanExecute = null)
         {
-            this.action = action != null ? (Action<object>)(obj => action()) : throw new ArgumentNullException(nameof(action));
-            if (canExecute == null)
-                return;
-            this.canExecute = (Predicate<object>)(obj => canExecute());
+            myAction = theAction != null ? (obj => theAction()) : throw new ArgumentNullException(nameof(theAction));
+            if (theCanExecute != null)
+            {
+                myCanExecute = obj => theCanExecute();
+            }
         }
 
-        public bool CanExecute(object? parameter)
+        public bool CanExecute(object? theParameter)
         {
-            Predicate<object> canExecute = this.canExecute;
-            return canExecute == null || canExecute(parameter);
+            if (theParameter != null)
+            {
+                Predicate<object>? aCanExecute = myCanExecute;
+                return aCanExecute == null || aCanExecute(theParameter);
+            }
+            return false;
         }
 
-        public void Execute(object? parameter) => this.action(parameter);
+        public void Execute(object? theParameter)
+        {
+            if (theParameter != null && myAction != null)
+            {
+                myAction(theParameter);
+            }
+        }
     }
 
+    /// <summary>
+    /// Generic implementation of relay command. 
+    /// </summary>
+    /// <typeparam name="T">The type.</typeparam>
     public class RelayCommand<T> : ICommand
     {
-        private readonly Predicate<T> _canExecute;
-        private readonly Action<T> _execute;
+        private readonly Predicate<T>? myCanExecute;
+        private readonly Action<T> myExecute;
 
-        public RelayCommand(Action<T> execute)
-           : this(execute, null)
+        public RelayCommand(Action<T> theExecute)
+            : this(theExecute, null)
         {
-            _execute = execute;
+            myExecute = theExecute ?? throw new ArgumentNullException(nameof(theExecute));
         }
 
-        public RelayCommand(Action<T> execute, Predicate<T> canExecute)
+        public RelayCommand(Action<T> theExecute, Predicate<T>? theCanExecute)
         {
-            if (execute == null)
-            {
-                throw new ArgumentNullException("execute");
-            }
-            _execute = execute;
-            _canExecute = canExecute;
+            myExecute = theExecute ?? throw new ArgumentNullException(nameof(theExecute));
+            myCanExecute = theCanExecute;
         }
 
-        public bool CanExecute(object parameter)
+        public bool CanExecute(object? theParameter)
         {
-            return _canExecute == null || _canExecute((T)parameter);
+            return myCanExecute == null || myCanExecute((T)theParameter!);
         }
 
-        public void Execute(object parameter)
+        public void Execute(object? theParameter)
         {
-            _execute((T)parameter);
+            myExecute((T)theParameter!);
         }
 
         public event EventHandler? CanExecuteChanged;
-
-        //public event EventHandler CanExecuteChanged
-        //{
-        //    add { CommandManager.RequerySuggested += value; }
-        //    remove { CommandManager.RequerySuggested -= value; }
-        //}
     }
 }
