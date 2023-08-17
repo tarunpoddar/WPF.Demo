@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
         xmlns:vm="clr-namespace:WPF.Demo.MainWindow.ViewModel"
+        xmlns:mvvm="clr-namespace:WPF.Common.Mvvm;assembly=WPF.Common.Mvvm"
         mc:Ignorable="d"
         Title="ERP Software" 
         Height="450" 
@@ -14,6 +15,10 @@
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
+
+    <Window.Resources>
+        <mvvm:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
+    </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -62,13 +67,7 @@
                 </Grid.RowDefinitions>
                 <TextBlock Grid.ColumnSpan="2"
                            HorizontalAlignment="Center"
-                           Text="Biller Registration">
-                     <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MouseLeftButtonDown">
-                            <i:InvokeCommandAction Command="{Binding MouseDownCommand}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </TextBlock>
+                           Text="Biller Registration"/>
                 <TextBlock Grid.Column="0"
                            Grid.Row="1"
                            HorizontalAlignment="Center"
@@ -87,38 +86,50 @@
                          Margin="5" 
                          Width="auto"
                           ItemsSource="{Binding Genders}"
-                          SelectedItem="{Binding SelectedGender}"/>
+                          SelectedItem="{Binding Gender}"/>
                 <TextBlock Grid.Column="0"
                            Grid.Row="3"
                            HorizontalAlignment="Center"
                            Text="Product"/>
                 <StackPanel Grid.Column="1"
                             Grid.Row="3">
-                    <TextBox x:Name="ProductSearchTextBox" 
+                    <TextBox x:Name="ProductTextBox" 
                              Margin="5,5,5,0"
-                             Text="{Binding SearchProduct, UpdateSourceTrigger=PropertyChanged}"/>
-                    <ListBox x:Name="ProductSearchListBox" 
-                             ItemsSource="{Binding FilteredSuggestions, Mode=TwoWay}"
+                             Text="{Binding Product, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Popup x:Name="AutoCompletePopup" 
+                           IsOpen="{Binding IsPopupOpen}"
+                           StaysOpen="False"
+                           Placement="Bottom">
+                        <Border Background="White" 
+                                BorderBrush="White"
+                                BorderThickness="0"
+                                Margin="0">
+                            <ListBox x:Name="ProductListBox" 
+                             ItemsSource="{Binding FilteredProducts, Mode=TwoWay}"
                              Height="auto"
-                             Margin="5,0,5,5">
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding}">
+                             Margin="5,0,5,5"
+                             Visibility="{Binding FilteredProducts.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDown">
-                                            <i:InvokeCommandAction Command="{Binding DataContext.SelectSuggestionCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" 
+                                            <i:InvokeCommandAction Command="{Binding DataContext.SelectProductCommand, ElementName=AutoCompletePopup}" 
                                                                    CommandParameter="{Binding}" />
+                                            <i:ChangePropertyAction TargetObject="{Binding ElementName=AutoCompletePopup}" PropertyName="IsOpen" Value="False" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
-                                </TextBlock>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Border>
+                    </Popup>
                 </StackPanel>
                 <TextBlock Grid.Column="0"
                            Grid.Row="4"

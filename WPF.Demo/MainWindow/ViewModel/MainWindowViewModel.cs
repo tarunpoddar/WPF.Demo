@@ -5,17 +5,30 @@ using WPF.Common.Mvvm;
 
 namespace WPF.Demo.MainWindow.ViewModel
 {
+    /// <summary>
+    /// ViewModel class for the main window.
+    /// </summary>
     class MainWindowViewModel : ObservableObject
     {
+        #region Commands
+
         public ICommand? CreateCommand { get; set; }
         public ICommand? ReadCommand { get; set; }
         public ICommand? UpdateCommand { get; set; }
         public ICommand? DeleteCommand { get; set; }
         public ICommand? SubmitCommand { get; set; }
-        public ICommand? MouseDownCommand { get; set; }
 
         /// <summary>
-        /// Customer's name.
+        /// Command to execute when a product is selected from the popup.
+        /// </summary>
+        public ICommand SelectProductCommand { get; set; }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the customer's name.
         /// </summary>
         private string? aName;
 
@@ -26,59 +39,78 @@ namespace WPF.Demo.MainWindow.ViewModel
         }
 
         /// <summary>
-        /// Collection of Genders.
+        /// Gets or sets the gender.
         /// </summary>
-        public ObservableCollection<string> Genders { get; set; }
+        private string? aGender;
+
+        public string? Gender
+        {
+            get => aGender;
+            set => SetProperty(ref aGender, value);
+        }
 
         /// <summary>
-        /// The selected gender.
+        /// Gets or sets the filtered products.
         /// </summary>
-        private string? aSelectedGender;
-
-        public string? SelectedGender
+        private ObservableCollection<string>? _filteredProducts;
+        public ObservableCollection<string>? FilteredProducts
         {
-            get => aSelectedGender;
-            set => SetProperty(ref aSelectedGender, value);
+            get => _filteredProducts;
+            set => SetProperty(ref _filteredProducts, value);
         }
 
-        public ObservableCollection<string> Products { get; } = new ObservableCollection<string>();
-
-        private ObservableCollection<string>? _filteredSuggestions;
-        public ObservableCollection<string>? FilteredSuggestions
+        /// <summary>
+        /// Gets or sets the search product text.
+        /// </summary>
+        private string? aProduct;
+        public string? Product
         {
-            get => _filteredSuggestions;
-            set => SetProperty(ref _filteredSuggestions, value);
-        }
-
-        private string? aSearchProduct;
-
-        public string? SearchProduct
-        {
-            get => aSearchProduct;
+            get => aProduct;
             set
             {
-                SetProperty(ref aSearchProduct, value);
-                UpdateFilteredSuggestions();
+                SetProperty(ref aProduct, value);
+                UpdateFilteredProducts();
             }
         }
 
-        public ICommand SelectSuggestionCommand { get; set; }
+        /// <summary>
+        /// Gets or sets whether the popup is open.
+        /// </summary>
+        private bool _isPopupOpen;
+        public bool IsPopupOpen
+        {
+            get => _isPopupOpen;
+            set => SetProperty(ref _isPopupOpen, value);
+        }
 
         /// <summary>
-        /// Constructor.
+        /// Gets or sets the collection of products.
+        /// </summary>
+        public ObservableCollection<string> Products { get; } = new ObservableCollection<string>();
+
+        /// <summary>
+        /// Gets or sets the collection of Genders.
+        /// </summary>
+        public ObservableCollection<string> Genders { get; set; }
+
+        #endregion
+
+        /// <summary>
+        /// Creates a new instance of <see cref="MainWindowViewModel"/>.
         /// </summary>
         public MainWindowViewModel()
         {
-            SelectSuggestionCommand = new RelayCommand<string>(SelectSuggestion);
-            FilteredSuggestions = new ObservableCollection<string>();
+            SelectProductCommand = new RelayCommand<string>(OnProductedSelected);
 
-            // CreateCommand = new RelayCommand
+            FilteredProducts = new ObservableCollection<string>();
+
             Name = string.Empty;
+
             Genders = new ObservableCollection<string>()
             {
                 "Select", "Male", "Female", "Others"
             };
-            SelectedGender = Genders.FirstOrDefault();
+            Gender = Genders.FirstOrDefault();
 
             Products = new ObservableCollection<string>()
             {
@@ -86,23 +118,28 @@ namespace WPF.Demo.MainWindow.ViewModel
             };
         }
 
-        private void UpdateFilteredSuggestions()
+        /// <summary>
+        /// Updates the filtered products in the popup.
+        /// </summary>
+        private void UpdateFilteredProducts()
         {
-            if (SearchProduct != null)
+            if (Product != null)
             {
-                var filteredSuggestions = Products.Where(s => s.Contains(SearchProduct, System.StringComparison.OrdinalIgnoreCase));
-                FilteredSuggestions = new ObservableCollection<string>(filteredSuggestions);
+                var filteredSuggestions = Products.Where(s => s.Contains(Product, System.StringComparison.OrdinalIgnoreCase));
+                FilteredProducts = new ObservableCollection<string>(filteredSuggestions);
+                IsPopupOpen = FilteredProducts.Any();
             }
         }
 
         /// <summary>
-        /// This is called on selection of a text in the popup.
+        /// Executes when a product is selcted in the popup.
         /// </summary>
         /// <param name="suggestion"></param>
-        private void SelectSuggestion(string suggestion)
+        private void OnProductedSelected(string suggestion)
         {
-            SearchProduct = suggestion;
-            FilteredSuggestions?.Clear();
+            Product = suggestion;
+            FilteredProducts?.Clear();
+            IsPopupOpen = false; // Close the popup
         }
     }
 }
