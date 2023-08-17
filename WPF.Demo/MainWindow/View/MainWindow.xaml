@@ -67,7 +67,7 @@
                 </Grid.RowDefinitions>
                 <TextBlock Grid.ColumnSpan="2"
                            HorizontalAlignment="Center"
-                           Text="Biller Registration"/>
+                           Text="Retail Billing"/>
                 <TextBlock Grid.Column="0"
                            Grid.Row="1"
                            Margin="5"
@@ -160,12 +160,16 @@
                 <StackPanel Grid.Column="1"
                              Grid.Row="5"
                              Orientation="Horizontal">
-                    <RadioButton 
+                    <RadioButton GroupName="PaymentModeGroup"
                              Margin="5"
-                             Content="Online"/>
-                    <RadioButton Grid.Column="1"
+                             Content="Online"
+                             Command="{Binding PaymentModeSelectedCommand}"
+                             CommandParameter="Online"/>
+                    <RadioButton GroupName="PaymentModeGroup"
                             Margin="5"
-                            Content="Cash"/>
+                            Content="Cash"
+                            Command="{Binding PaymentModeSelectedCommand}"
+                            CommandParameter="Cash"/>
                 </StackPanel>
                 <TextBlock Grid.Column="0"
                            Grid.Row="6"
@@ -175,8 +179,7 @@
                 <DatePicker Grid.Row="6" 
                             Grid.Column="1"
                             Margin="5" 
-                            />
-
+                            SelectedDate="{Binding DateOfPurchase}"/>
             </Grid>
         </ScrollViewer>
         <Button Grid.Row="2" 

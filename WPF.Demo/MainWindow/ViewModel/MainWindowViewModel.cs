@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using WPF.Common.Mvvm;
 
@@ -23,7 +24,7 @@ namespace WPF.Demo.MainWindow.ViewModel
         /// Command to execute when a product is selected from the popup.
         /// </summary>
         public ICommand SelectProductCommand { get; set; }
-        
+
         /// <summary>
         /// Command to execute when quantity is increased.
         /// </summary>
@@ -33,6 +34,11 @@ namespace WPF.Demo.MainWindow.ViewModel
         /// Command to execute when quantity is decreased.
         /// </summary>
         public ICommand? DecreaseQuantityCommand { get; set; }
+
+        /// <summary>
+        ///  Command to execute when a payment mode is selected.
+        /// </summary>
+        public ICommand? PaymentModeSelectedCommand { get; set; }
 
         #endregion
 
@@ -87,13 +93,16 @@ namespace WPF.Demo.MainWindow.ViewModel
         /// <summary>
         /// Gets or sets whether the popup is open.
         /// </summary>
-        private bool _isPopupOpen;
+        private bool aIsPopupOpen;
         public bool IsPopupOpen
         {
-            get => _isPopupOpen;
-            set => SetProperty(ref _isPopupOpen, value);
+            get => aIsPopupOpen;
+            set => SetProperty(ref aIsPopupOpen, value);
         }
 
+        /// <summary>
+        ///  Gets or sets the quantity of the product.
+        /// </summary>
         private int aQuantity;
         public int Quantity
         {
@@ -102,14 +111,30 @@ namespace WPF.Demo.MainWindow.ViewModel
         }
 
         /// <summary>
+        /// Gets or sets the date of purchase.
+        /// </summary>
+        private DateTime aDateOfPurchase;
+        public DateTime DateOfPurchase
+        {
+            get => aDateOfPurchase;
+            set => SetProperty(ref aDateOfPurchase, value);
+        }
+
+        /// <summary>
         /// Gets or sets the collection of products.
         /// </summary>
-        public ObservableCollection<string> Products { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> Products { get; set; }
 
         /// <summary>
         /// Gets or sets the collection of Genders.
         /// </summary>
         public ObservableCollection<string> Genders { get; set; }
+
+        #endregion
+
+        #region Fields
+
+        private string myPaymentMode = string.Empty;
 
         #endregion
 
@@ -124,11 +149,15 @@ namespace WPF.Demo.MainWindow.ViewModel
 
             IncreaseQuantityCommand = new RelayCommand(OnincreaseQuantity);
 
+            PaymentModeSelectedCommand = new RelayCommand<string>(PaymentModeSelected);
+
             SubmitCommand = new RelayCommand(OnSubmit);
 
             FilteredProducts = new ObservableCollection<string>();
 
             Name = string.Empty;
+
+            DateOfPurchase = DateTime.Today;
 
             Genders = new ObservableCollection<string>()
             {
@@ -142,9 +171,13 @@ namespace WPF.Demo.MainWindow.ViewModel
             };
         }
 
-        private void OnSubmit()
+        /// <summary>
+        /// Handles when a payment mode radio is selected.
+        /// </summary>
+        /// <param name="thePaymentMode">The payment mode.</param>
+        private void PaymentModeSelected(string thePaymentMode)
         {
-            
+            myPaymentMode = thePaymentMode;
         }
 
         /// <summary>
@@ -193,6 +226,16 @@ namespace WPF.Demo.MainWindow.ViewModel
             Product = suggestion;
             FilteredProducts?.Clear();
             IsPopupOpen = false; // Close the popup
+        }
+
+        private void OnSubmit()
+        {
+            MessageBox.Show($"Name: {Name}\n" +
+                $"Gender: {Gender}\n" +
+                $"Product: {Product}\n" +
+                $"Quantity: {Quantity}\n" +
+                $"Mode of Payment: {myPaymentMode}\n" +
+                $"Date of Purchase: {DateOfPurchase.ToShortDateString()}");
         }
     }
 }
