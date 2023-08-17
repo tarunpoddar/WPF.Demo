@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using WPF.Common.Mvvm;
@@ -6,7 +7,7 @@ using WPF.Common.Mvvm;
 namespace WPF.Demo.MainWindow.ViewModel
 {
     /// <summary>
-    /// ViewModel class for the main window.
+    /// View Model class for the main window.
     /// </summary>
     class MainWindowViewModel : ObservableObject
     {
@@ -22,6 +23,16 @@ namespace WPF.Demo.MainWindow.ViewModel
         /// Command to execute when a product is selected from the popup.
         /// </summary>
         public ICommand SelectProductCommand { get; set; }
+        
+        /// <summary>
+        /// Command to execute when quantity is increased.
+        /// </summary>
+        public ICommand? IncreaseQuantityCommand { get; set; }
+
+        /// <summary>
+        /// Command to execute when quantity is decreased.
+        /// </summary>
+        public ICommand? DecreaseQuantityCommand { get; set; }
 
         #endregion
 
@@ -83,6 +94,13 @@ namespace WPF.Demo.MainWindow.ViewModel
             set => SetProperty(ref _isPopupOpen, value);
         }
 
+        private int aQuantity;
+        public int Quantity
+        {
+            get => aQuantity;
+            set => SetProperty(ref aQuantity, value);
+        }
+
         /// <summary>
         /// Gets or sets the collection of products.
         /// </summary>
@@ -102,6 +120,12 @@ namespace WPF.Demo.MainWindow.ViewModel
         {
             SelectProductCommand = new RelayCommand<string>(OnProductedSelected);
 
+            DecreaseQuantityCommand = new RelayCommand(OnDecreaseQuantity, CanDecreaseQuantity);
+
+            IncreaseQuantityCommand = new RelayCommand(OnincreaseQuantity);
+
+            SubmitCommand = new RelayCommand(OnSubmit);
+
             FilteredProducts = new ObservableCollection<string>();
 
             Name = string.Empty;
@@ -116,6 +140,35 @@ namespace WPF.Demo.MainWindow.ViewModel
             {
                 "Cement", "Rod", "Bali", "Pathor", "Taar"
             };
+        }
+
+        private void OnSubmit()
+        {
+            
+        }
+
+        /// <summary>
+        /// Increases the quantity of the product.
+        /// </summary>
+        private void OnincreaseQuantity()
+        {
+            Quantity++;
+        }
+
+        /// <summary>
+        /// Decreases the quantity of the product.
+        /// </summary>
+        private void OnDecreaseQuantity()
+        {
+            Quantity--;
+        }
+
+        /// <summary>
+        /// Checks whether the quantity of the product can be decreased further.
+        /// </summary>
+        private bool CanDecreaseQuantity()
+        {
+            return Quantity > 0;
         }
 
         /// <summary>
