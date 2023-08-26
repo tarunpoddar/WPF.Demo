@@ -46,6 +46,17 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="ErrorWithMarginStyle" 
+            TargetType="TextBox">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SubmitButtonClicked}" Value="true">
+                    <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplateWithMargin}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding SubmitButtonClicked}" Value="false">
+                    <Setter Property="Validation.ErrorTemplate" Value="{StaticResource NoErrorTemplate}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
         <Style TargetType="ComboBox">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding SubmitButtonClicked}" Value="true">
@@ -238,7 +249,8 @@
                             Command="{Binding DecreaseQuantityCommand}"/>
                     <TextBox x:Name="QuantityTextBox"
                              Width="25"
-                             TextAlignment="Center">
+                             TextAlignment="Center"
+                             Style="{StaticResource ErrorWithMarginStyle}">
                         <TextBox.Text>
                             <Binding Path="Quantity" 
                                  UpdateSourceTrigger="PropertyChanged"
