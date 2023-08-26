@@ -121,6 +121,64 @@ namespace WPF.Demo.MainWindow.ViewModel
         }
 
         /// <summary>
+        /// Gets or sets wether the payment mode error text is visible.
+        /// </summary>
+        private bool aIsPaymentModeErrorTextVisible;
+        public bool IsPaymentModeErrorTextVisible
+        {
+            get => aIsPaymentModeErrorTextVisible;
+            set => SetProperty(ref aIsPaymentModeErrorTextVisible, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the payment mode error text.
+        /// </summary>
+        private string? aPaymentModeErrorText;
+        public string? PaymentModeErrorText
+        {
+            get => aPaymentModeErrorText;
+            set => SetProperty(ref aPaymentModeErrorText, value);
+        }
+
+        /// <summary>
+        /// Gets or sets wether the online radio button is checked.
+        /// </summary>
+        private bool aIsOnlineRadioButtonChecked;
+        public bool IsOnlineRadioButtonChecked
+        {
+            get => aIsOnlineRadioButtonChecked;
+            set
+            {
+                SetProperty(ref aIsOnlineRadioButtonChecked, value);
+                IsPaymentModeErrorTextVisible = false;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets wether the cash radio button is checked.
+        /// </summary>
+        private bool aIsCashRadioButtonChecked;
+        public bool IsCashRadioButtonChecked
+        {
+            get => aIsCashRadioButtonChecked;
+            set
+            {
+                SetProperty(ref aIsCashRadioButtonChecked, value);
+                IsPaymentModeErrorTextVisible = false;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets wether the submit button is checked.
+        /// </summary>
+        private bool aSubmitButtonClicked;
+        public bool SubmitButtonClicked
+        {
+            get => aSubmitButtonClicked;
+            set => SetProperty(ref aSubmitButtonClicked, value);
+        }
+
+        /// <summary>
         /// Gets or sets the collection of products.
         /// </summary>
         public ObservableCollection<string> Products { get; set; }
@@ -138,12 +196,14 @@ namespace WPF.Demo.MainWindow.ViewModel
 
         #endregion
 
+        #region Constructor
+
         /// <summary>
         /// Creates a new instance of <see cref="MainWindowViewModel"/>.
         /// </summary>
         public MainWindowViewModel()
         {
-            SelectProductCommand = new RelayCommand<string>(OnProductedSelected);
+            SelectProductCommand = new RelayCommand<string>(OnProductSelected);
 
             DecreaseQuantityCommand = new RelayCommand(OnDecreaseQuantity, CanDecreaseQuantity);
 
@@ -157,7 +217,13 @@ namespace WPF.Demo.MainWindow.ViewModel
 
             Name = string.Empty;
 
+            Quantity = 1;
+
             DateOfPurchase = DateTime.Today;
+
+            IsPaymentModeErrorTextVisible = false;
+
+            PaymentModeErrorText = "Please select a payment mode.";
 
             Genders = new ObservableCollection<string>()
             {
@@ -170,6 +236,10 @@ namespace WPF.Demo.MainWindow.ViewModel
                 "Cement", "Rod", "Bali", "Pathor", "Taar"
             };
         }
+
+        #endregion
+
+        #region Members
 
         /// <summary>
         /// Handles when a payment mode radio is selected.
@@ -201,7 +271,7 @@ namespace WPF.Demo.MainWindow.ViewModel
         /// </summary>
         private bool CanDecreaseQuantity()
         {
-            return Quantity > 0;
+            return Quantity > 1;
         }
 
         /// <summary>
@@ -220,16 +290,27 @@ namespace WPF.Demo.MainWindow.ViewModel
         /// <summary>
         /// Executes when a product is selcted in the popup.
         /// </summary>
-        /// <param name="suggestion"></param>
-        private void OnProductedSelected(string suggestion)
+        /// <param name="theProduct">The selected product.</param>
+        private void OnProductSelected(string theProduct)
         {
-            Product = suggestion;
+            Product = theProduct;
             FilteredProducts?.Clear();
             IsPopupOpen = false; // Close the popup
         }
 
+        /// <summary>
+        /// Executes when submit button is clicked.
+        /// </summary>
         private void OnSubmit()
         {
+            SubmitButtonClicked = true;
+
+            if (!IsOnlineRadioButtonChecked && !IsCashRadioButtonChecked)
+            {
+                IsPaymentModeErrorTextVisible = true;
+                return;
+            }
+
             MessageBox.Show($"Name: {Name}\n" +
                 $"Gender: {Gender}\n" +
                 $"Product: {Product}\n" +
@@ -237,5 +318,7 @@ namespace WPF.Demo.MainWindow.ViewModel
                 $"Mode of Payment: {myPaymentMode}\n" +
                 $"Date of Purchase: {DateOfPurchase.ToShortDateString()}");
         }
+
+        #endregion
     }
 }

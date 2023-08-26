@@ -18,15 +18,72 @@
 
     <Window.Resources>
         <mvvm:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
+        <mvvm:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <ControlTemplate x:Key="ValidationErrorTemplate">
+            <StackPanel>
+                <AdornedElementPlaceholder />
+                <TextBlock Text="{Binding [0].ErrorContent}" 
+                           Foreground="Red" />
+            </StackPanel>
+        </ControlTemplate>
+        <ControlTemplate x:Key="ValidationErrorTemplateWithMargin">
+            <StackPanel>
+                <AdornedElementPlaceholder />
+                <TextBlock Text="{Binding [0].ErrorContent}" 
+                           Foreground="Red" Margin="-22,0,0,0" />
+            </StackPanel>
+        </ControlTemplate>
+        <ControlTemplate x:Key="NoErrorTemplate">
+            <Border/>
+        </ControlTemplate>
+        <Style TargetType="TextBox">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SubmitButtonClicked}" Value="true">
+                    <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding SubmitButtonClicked}" Value="false">
+                    <Setter Property="Validation.ErrorTemplate" Value="{StaticResource NoErrorTemplate}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SubmitButtonClicked}" Value="true">
+                    <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding SubmitButtonClicked}" Value="false">
+                    <Setter Property="Validation.ErrorTemplate" Value="{StaticResource NoErrorTemplate}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="DatePicker">
+            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}" />
+        </Style>
+        <Style x:Key="SubmitButtonStyle"
+                TargetType="Button">
+            <Setter Property="IsEnabled" 
+                            Value="False"/>
+            <Style.Triggers>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Path=(Validation.HasError), ElementName=NameTextBox}" Value="False"/>
+                        <Condition Binding="{Binding Path=(Validation.HasError), ElementName=GenderComboBox}" Value="False"/>
+                        <Condition Binding="{Binding Path=(Validation.HasError), ElementName=QuantityTextBox}" Value="False"/>
+                        <Condition Binding="{Binding Path=(Validation.HasError), ElementName=ProductTextBox}" Value="False"/>
+                        <Condition Binding="{Binding Path=(Validation.HasError), ElementName=DateOfPurchaseDatePicker}" Value="False"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="IsEnabled" 
+                                    Value="True"/>
+                </MultiDataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-
         <Menu>
             <MenuItem Header="Read"
                   x:Name="ReadMenuItem"
@@ -70,35 +127,70 @@
                            Text="Retail Billing"/>
                 <TextBlock Grid.Column="0"
                            Grid.Row="1"
-                           Margin="5"
+                           Margin="10"
                            HorizontalAlignment="Center"
                            Text="Name"/>
-                <TextBox Grid.Column="1"
-                         Grid.Row="1"
-                         Margin="5" 
-                         Width="auto"
-                         Text ="{Binding Name}"/>
+                <StackPanel Grid.Column="1"
+                            Grid.Row="1"
+                            Margin="10">
+                    <TextBox Name="NameTextBox"
+                             ToolTip="Enter customers name"
+                         Width="auto">
+                        <TextBox.Text>
+                            <Binding Path="Name" 
+                                 UpdateSourceTrigger="PropertyChanged"
+                                 NotifyOnValidationError="True"
+                                 ValidatesOnDataErrors="True">
+                                <Binding.ValidationRules>
+                                    <mvvm:AlphabeticValidationRule ValidatesOnTargetUpdated="True"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </StackPanel>
                 <TextBlock Grid.Column="0"
                            Grid.Row="2"
-                           Margin="5"
+                           Margin="10"
                            HorizontalAlignment="Center"
                            Text="Gender"/>
-                <ComboBox Grid.Column="1"
-                         Grid.Row="2"
-                         Margin="5" 
+                <StackPanel Grid.Column="1"
+                            Grid.Row="2"
+                            Margin="10" >
+                    <ComboBox x:Name="GenderComboBox"
                          Width="auto"
-                          ItemsSource="{Binding Genders}"
-                          SelectedItem="{Binding Gender}"/>
+                         ItemsSource="{Binding Genders}">
+                        <ComboBox.Text>
+                            <Binding Path="Gender" 
+                                     UpdateSourceTrigger="PropertyChanged"
+                                     ValidatesOnDataErrors="True"
+                                     NotifyOnValidationError="True">
+                                <Binding.ValidationRules>
+                                    <mvvm:ComboBoxSelectionValidationRule ValidatesOnTargetUpdated="True" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </ComboBox.Text>
+                    </ComboBox>
+                </StackPanel>
                 <TextBlock Grid.Column="0"
                            Grid.Row="3"
-                           Margin="5"
+                           Margin="10"
                            HorizontalAlignment="Center"
                            Text="Product"/>
                 <StackPanel Grid.Column="1"
-                            Grid.Row="3">
-                    <TextBox x:Name="ProductTextBox" 
-                             Margin="5,5,5,0"
-                             Text="{Binding Product, UpdateSourceTrigger=PropertyChanged}"/>
+                            Grid.Row="3"
+                            Margin="10">
+                    <TextBox Name="ProductTextBox">
+                        <TextBox.Text>
+                            <Binding Path="Product" 
+                                 UpdateSourceTrigger="PropertyChanged"
+                                 NotifyOnValidationError="True"
+                                 ValidatesOnDataErrors="True">
+                                <Binding.ValidationRules>
+                                    <mvvm:AlphabeticValidationRule ValidatesOnTargetUpdated="True"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                     <Popup x:Name="AutoCompletePopup" 
                            IsOpen="{Binding IsPopupOpen}"
                            StaysOpen="False"
@@ -110,7 +202,6 @@
                             <ListBox x:Name="ProductListBox" 
                              ItemsSource="{Binding FilteredProducts, Mode=TwoWay}"
                              Height="auto"
-                             Margin="5,0,5,5"
                              Visibility="{Binding FilteredProducts.Count, Converter={StaticResource CountToVisibilityConverter}}">
                                 <ListBox.ItemContainerStyle>
                                     <Style TargetType="ListBoxItem">
@@ -135,51 +226,80 @@
                     </Popup>
                 </StackPanel>
                 <TextBlock Grid.Column="0"
-                           Margin="5"
+                           Margin="10"
                            Grid.Row="4"
                            HorizontalAlignment="Center"
                            Text="Quantity"/>
                 <StackPanel Grid.Column="1"
                             Grid.Row="4"
                             Orientation="Horizontal"
-                            Margin="5">
+                            Margin="10">
                     <Button Content="  -  "
                             Command="{Binding DecreaseQuantityCommand}"/>
-                    <TextBox Width="25"
-                             TextAlignment="Center" 
-                             Text="{Binding Quantity}"/>
+                    <TextBox x:Name="QuantityTextBox"
+                             Width="25"
+                             TextAlignment="Center">
+                        <TextBox.Text>
+                            <Binding Path="Quantity" 
+                                 UpdateSourceTrigger="PropertyChanged"
+                                 NotifyOnValidationError="True"
+                                 ValidatesOnDataErrors="True">
+                                <Binding.ValidationRules>
+                                    <mvvm:CountValidationRule ValidatesOnTargetUpdated="True"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                     <Button Content=" + "
                             Command="{Binding IncreaseQuantityCommand}"/>
-
                 </StackPanel>
                 <TextBlock Grid.Column="0"
                            Grid.Row="5"
-                           Margin="5"
+                           Margin="10"
                            HorizontalAlignment="Center"
                            Text="Mode of Payment"/>
                 <StackPanel Grid.Column="1"
-                             Grid.Row="5"
+                            Grid.Row="5"
+                            Margin="10">
+                    <StackPanel 
                              Orientation="Horizontal">
-                    <RadioButton GroupName="PaymentModeGroup"
-                             Margin="5"
+                        <RadioButton GroupName="PaymentModeGroup"
+                             Margin="10"
                              Content="Online"
                              Command="{Binding PaymentModeSelectedCommand}"
-                             CommandParameter="Online"/>
-                    <RadioButton GroupName="PaymentModeGroup"
-                            Margin="5"
+                             CommandParameter="Online"
+                             IsChecked="{Binding IsOnlineRadioButtonChecked, Mode=TwoWay}"/>
+                        <RadioButton GroupName="PaymentModeGroup"
+                            Margin="10"
                             Content="Cash"
                             Command="{Binding PaymentModeSelectedCommand}"
-                            CommandParameter="Cash"/>
+                            CommandParameter="Cash"
+                            IsChecked="{Binding IsCashRadioButtonChecked, Mode=TwoWay}"/>
+                    </StackPanel>
+                    <TextBlock Text="{Binding PaymentModeErrorText}" 
+                               Foreground="Red"
+                               Visibility="{Binding IsPaymentModeErrorTextVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </StackPanel>
                 <TextBlock Grid.Column="0"
                            Grid.Row="6"
-                           Margin="5"
+                           Margin="10"
                            HorizontalAlignment="Center"
                            Text="Date of Purchase"/>
-                <DatePicker Grid.Row="6" 
+                <DatePicker x:Name="DateOfPurchaseDatePicker"
+                            Grid.Row="6" 
                             Grid.Column="1"
-                            Margin="5" 
-                            SelectedDate="{Binding DateOfPurchase}"/>
+                            Margin="10">
+                    <DatePicker.SelectedDate>
+                        <Binding Path="DateOfPurchase" 
+                                 UpdateSourceTrigger="PropertyChanged"
+                                 ValidatesOnDataErrors="True" 
+                                 NotifyOnValidationError="True">
+                            <Binding.ValidationRules>
+                                <mvvm:DatePickerValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </DatePicker.SelectedDate>
+                </DatePicker>
             </Grid>
         </ScrollViewer>
         <Button Grid.Row="2" 
@@ -188,6 +308,8 @@
                 Margin="10" 
                 VerticalAlignment="Top" 
                 Content="Submit"
-                Command="{Binding SubmitCommand}"/>
+                Style="{StaticResource SubmitButtonStyle}"
+                Command="{Binding SubmitCommand}">
+        </Button>
     </Grid>
 </Window>
