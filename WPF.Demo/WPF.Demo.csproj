@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WPF.Common.Mvvm\WPF.Common.Mvvm.csproj" />
+    <ProjectReference Include="..\WPF.Common.Style\WPF.Common.Style.csproj" />
   </ItemGroup>
 
 </Project>

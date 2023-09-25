@@ -17,78 +17,12 @@
     </Window.DataContext>
 
     <Window.Resources>
-        <mvvm:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
-        <mvvm:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <ControlTemplate x:Key="ValidationErrorTemplate">
-            <StackPanel>
-                <AdornedElementPlaceholder />
-                <TextBlock Text="{Binding [0].ErrorContent}" 
-                           Foreground="Red" />
-            </StackPanel>
-        </ControlTemplate>
-        <ControlTemplate x:Key="ValidationErrorTemplateWithMargin">
-            <StackPanel>
-                <AdornedElementPlaceholder />
-                <TextBlock Text="{Binding [0].ErrorContent}" 
-                           Foreground="Red" Margin="-22,0,0,0" />
-            </StackPanel>
-        </ControlTemplate>
-        <ControlTemplate x:Key="NoErrorTemplate">
-            <Border/>
-        </ControlTemplate>
-        <Style TargetType="TextBox">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding SubmitButtonClicked}" Value="true">
-                    <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding SubmitButtonClicked}" Value="false">
-                    <Setter Property="Validation.ErrorTemplate" Value="{StaticResource NoErrorTemplate}" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="ErrorWithMarginStyle" 
-            TargetType="TextBox">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding SubmitButtonClicked}" Value="true">
-                    <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplateWithMargin}" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding SubmitButtonClicked}" Value="false">
-                    <Setter Property="Validation.ErrorTemplate" Value="{StaticResource NoErrorTemplate}" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-        <Style TargetType="ComboBox">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding SubmitButtonClicked}" Value="true">
-                    <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding SubmitButtonClicked}" Value="false">
-                    <Setter Property="Validation.ErrorTemplate" Value="{StaticResource NoErrorTemplate}" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-        <Style TargetType="DatePicker">
-            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}" />
-        </Style>
-        <Style x:Key="SubmitButtonStyle"
-                TargetType="Button">
-            <Setter Property="IsEnabled" 
-                            Value="False"/>
-            <Style.Triggers>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding Path=(Validation.HasError), ElementName=NameTextBox}" Value="False"/>
-                        <Condition Binding="{Binding Path=(Validation.HasError), ElementName=GenderComboBox}" Value="False"/>
-                        <Condition Binding="{Binding Path=(Validation.HasError), ElementName=QuantityTextBox}" Value="False"/>
-                        <Condition Binding="{Binding Path=(Validation.HasError), ElementName=ProductTextBox}" Value="False"/>
-                        <Condition Binding="{Binding Path=(Validation.HasError), ElementName=DateOfPurchaseDatePicker}" Value="False"/>
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="IsEnabled" 
-                                    Value="True"/>
-                </MultiDataTrigger>
-            </Style.Triggers>
-        </Style>
+        <ResourceDictionary>
+            <mvvm:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
+            <mvvm:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        </ResourceDictionary>
     </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
