@@ -81,7 +81,7 @@
                              Width="auto">
                         <TextBox.Text>
                             <Binding Path="Name" 
-                                 UpdateSourceTrigger="LostFocus"
+                                 UpdateSourceTrigger="PropertyChanged"
                                  NotifyOnValidationError="True"
                                  ValidatesOnDataErrors="True">
                                 <Binding.ValidationRules>
@@ -104,7 +104,7 @@
                          ItemsSource="{Binding Genders}">
                         <ComboBox.Text>
                             <Binding Path="Gender" 
-                                     UpdateSourceTrigger="LostFocus"
+                                     UpdateSourceTrigger="PropertyChanged"
                                      ValidatesOnDataErrors="True"
                                      NotifyOnValidationError="True">
                                 <Binding.ValidationRules>
@@ -125,7 +125,7 @@
                     <TextBox Name="ProductTextBox">
                         <TextBox.Text>
                             <Binding Path="Product" 
-                                 UpdateSourceTrigger="LostFocus"
+                                 UpdateSourceTrigger="PropertyChanged"
                                  NotifyOnValidationError="True"
                                  ValidatesOnDataErrors="True">
                                 <Binding.ValidationRules>
@@ -185,7 +185,7 @@
                              Validation.ErrorTemplate="{StaticResource ValidationErrorTemplateWithMargin}">
                         <TextBox.Text>
                             <Binding Path="Quantity" 
-                                 UpdateSourceTrigger="LostFocus"
+                                 UpdateSourceTrigger="PropertyChanged"
                                  NotifyOnValidationError="True"
                                  ValidatesOnDataErrors="True">
                                 <Binding.ValidationRules>
