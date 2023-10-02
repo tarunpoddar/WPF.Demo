@@ -1,70 +1,55 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+   
     <!-- Control template when validation fails.-->
     <ControlTemplate x:Key="ValidationErrorTemplate">
         <StackPanel>
             <AdornedElementPlaceholder />
             <TextBlock Text="{Binding [0].ErrorContent}" 
-                       Foreground="Red" />
+                           Foreground="Red" />
         </StackPanel>
     </ControlTemplate>
-
-    <!-- Control template when validation passes.-->
-    <ControlTemplate x:Key="NoErrorTemplate">
-        <Border/>
-    </ControlTemplate>
-
+    
     <!-- Control template with margin for Quantity textbox when validation fails.-->
     <ControlTemplate x:Key="ValidationErrorTemplateWithMargin">
         <StackPanel>
             <AdornedElementPlaceholder />
             <TextBlock Text="{Binding [0].ErrorContent}" 
-                       Foreground="Red" Margin="-22,0,0,0" />
+                           Foreground="Red" Margin="-22,0,0,0" />
         </StackPanel>
     </ControlTemplate>
 
+    <!-- Control template with margin for Quantity textbox when there are no errors.-->
+    <ControlTemplate x:Key="NoErrorTemplate">
+        <Border/>
+    </ControlTemplate>
+    
     <!-- Style for all textbox controls with validation error control template.-->
-    <Style x:Key="MyTextboxStyle"
-        TargetType="TextBox">
+    <Style TargetType="TextBox">
         <Style.Triggers>
-            <DataTrigger Binding="{Binding SubmitButtonClicked}" Value="true">
+            <DataTrigger Binding="{Binding IsTextEntered}" Value="true">
                 <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding SubmitButtonClicked}" Value="false">
-                <Setter Property="Validation.ErrorTemplate" Value="{StaticResource NoErrorTemplate}" />
-            </DataTrigger>
-        </Style.Triggers>
-    </Style>
-
-    <!-- Style for a particular textbox control with validation error control template with margin for Quantity field.-->
-    <Style x:Key="ErrorWithMarginStyle" 
-           TargetType="TextBox">
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding SubmitButtonClicked}" Value="true">
-                <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplateWithMargin}" />
-            </DataTrigger>
-            <DataTrigger Binding="{Binding SubmitButtonClicked}" Value="false">
+            <DataTrigger Binding="{Binding IsTextEntered}" Value="false">
                 <Setter Property="Validation.ErrorTemplate" Value="{StaticResource NoErrorTemplate}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
 
     <!-- Style for all combobox controls with validation error control template.-->
-    <Style x:Key="MyComboboxStyle" 
-        TargetType="ComboBox">
+    <Style TargetType="ComboBox">
         <Style.Triggers>
-            <DataTrigger Binding="{Binding SubmitButtonClicked}" Value="true">
+            <DataTrigger Binding="{Binding IsTextEntered}" Value="true">
                 <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding SubmitButtonClicked}" Value="false">
+            <DataTrigger Binding="{Binding IsTextEntered}" Value="false">
                 <Setter Property="Validation.ErrorTemplate" Value="{StaticResource NoErrorTemplate}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
 
     <!-- Style for date picker control with validation error control template.-->
-    <Style x:Key="MyDatePickerStyle" 
-        TargetType="DatePicker">
+    <Style TargetType="DatePicker">
         <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}" />
     </Style>
 
@@ -72,7 +57,7 @@
     <Style x:Key="SubmitButtonStyle"
                 TargetType="Button">
         <Setter Property="IsEnabled" 
-                Value="False"/>
+                            Value="False"/>
         <Style.Triggers>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
@@ -83,7 +68,7 @@
                     <Condition Binding="{Binding Path=(Validation.HasError), ElementName=DateOfPurchaseDatePicker}" Value="False"/>
                 </MultiDataTrigger.Conditions>
                 <Setter Property="IsEnabled" 
-                        Value="True"/>
+                                    Value="True"/>
             </MultiDataTrigger>
         </Style.Triggers>
     </Style>

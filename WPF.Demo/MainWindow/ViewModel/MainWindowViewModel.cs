@@ -45,6 +45,17 @@ namespace WPF.Demo.MainWindow.ViewModel
         #region Properties
 
         /// <summary>
+        /// Gets or sets wether the name is entered or not.
+        /// </summary>
+        private bool aIsTextEntered;
+
+        public bool IsTextEntered
+        {
+            get => aIsTextEntered;
+            set => SetProperty(ref aIsTextEntered, value);
+        }
+
+        /// <summary>
         /// Gets or sets the customer's name.
         /// </summary>
         private string? aName;
@@ -52,7 +63,15 @@ namespace WPF.Demo.MainWindow.ViewModel
         public string? Name
         {
             get => aName;
-            set => SetProperty(ref aName, value);
+            set
+            {
+                if (aName != null)
+                {
+                    IsTextEntered = true;
+                }
+
+                SetProperty(ref aName, value);
+            }
         }
 
         /// <summary>

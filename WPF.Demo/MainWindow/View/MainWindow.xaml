@@ -17,12 +17,10 @@
     </Window.DataContext>
 
     <Window.Resources>
-        <ResourceDictionary>
-            <mvvm:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
-            <mvvm:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        </ResourceDictionary>
+        <mvvm:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
+        <mvvm:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
-
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -80,10 +78,10 @@
                             Margin="10">
                     <TextBox Name="NameTextBox"
                              ToolTip="Enter customers name"
-                         Width="auto">
+                             Width="auto">
                         <TextBox.Text>
                             <Binding Path="Name" 
-                                 UpdateSourceTrigger="PropertyChanged"
+                                 UpdateSourceTrigger="LostFocus"
                                  NotifyOnValidationError="True"
                                  ValidatesOnDataErrors="True">
                                 <Binding.ValidationRules>
@@ -106,7 +104,7 @@
                          ItemsSource="{Binding Genders}">
                         <ComboBox.Text>
                             <Binding Path="Gender" 
-                                     UpdateSourceTrigger="PropertyChanged"
+                                     UpdateSourceTrigger="LostFocus"
                                      ValidatesOnDataErrors="True"
                                      NotifyOnValidationError="True">
                                 <Binding.ValidationRules>
@@ -127,7 +125,7 @@
                     <TextBox Name="ProductTextBox">
                         <TextBox.Text>
                             <Binding Path="Product" 
-                                 UpdateSourceTrigger="PropertyChanged"
+                                 UpdateSourceTrigger="LostFocus"
                                  NotifyOnValidationError="True"
                                  ValidatesOnDataErrors="True">
                                 <Binding.ValidationRules>
@@ -184,10 +182,10 @@
                     <TextBox x:Name="QuantityTextBox"
                              Width="25"
                              TextAlignment="Center"
-                             Style="{StaticResource ErrorWithMarginStyle}">
+                             Validation.ErrorTemplate="{StaticResource ValidationErrorTemplateWithMargin}">
                         <TextBox.Text>
                             <Binding Path="Quantity" 
-                                 UpdateSourceTrigger="PropertyChanged"
+                                 UpdateSourceTrigger="LostFocus"
                                  NotifyOnValidationError="True"
                                  ValidatesOnDataErrors="True">
                                 <Binding.ValidationRules>
