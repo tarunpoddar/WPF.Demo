@@ -9,9 +9,10 @@
         xmlns:local="clr-namespace:WPF.Demo"
         mc:Ignorable="d"
         Title="ERP Software" 
-        Height="450" 
+        Height="500" 
         Width="500" 
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" 
+        Background="{DynamicResource BackgroundColor}">
 
     <Window.DataContext>
         <vm:MainWindowViewModel/>
@@ -28,7 +29,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <Menu>
+        <Menu FontSize="14">
             <MenuItem Header="Read"
                   x:Name="ReadMenuItem"
                   AutomationProperties.AutomationId="ReadMenuItem"
@@ -48,6 +49,10 @@
                   x:Name="DeleteMenuItem"
                   AutomationProperties.AutomationId="DeleteMenuItem"
                   Command="{Binding DeleteCommand}">
+            </MenuItem>
+            <MenuItem Header="Theme" HorizontalAlignment="Right">
+                <MenuItem Header="Dark" Command="{Binding DarkThemeCommand}"/>
+                <MenuItem Header="Light" Command="{Binding LightThemeCommand}"/>
             </MenuItem>
         </Menu>
         <ScrollViewer Grid.Row="1" 
@@ -264,7 +269,7 @@
                     VerticalAlignment="Top" 
                     Content="Submit"
                     Style="{StaticResource SubmitButtonStyle}"
-                    Command="{Binding SubmitCommand}">      
+                    Command="{Binding SubmitCommand}">
             </Button>
         </StackPanel>
     </Grid>

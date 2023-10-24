@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using WPF.Common.Mvvm;
 
 namespace WPF.Demo.MainWindow.ViewModel
@@ -19,6 +20,16 @@ namespace WPF.Demo.MainWindow.ViewModel
         public ICommand? UpdateCommand { get; set; }
         public ICommand? DeleteCommand { get; set; }
         public ICommand? SubmitCommand { get; set; }
+
+        /// <summary>
+        /// Changes theme to dark.
+        /// </summary>
+        public ICommand? DarkThemeCommand { get; set; }
+
+        /// <summary>
+        /// Changes theme to light.
+        /// </summary>
+        public ICommand? LightThemeCommand { get; set; }
 
         /// <summary>
         /// Command to execute when a product is selected from the popup.
@@ -222,6 +233,12 @@ namespace WPF.Demo.MainWindow.ViewModel
         /// </summary>
         public MainWindowViewModel()
         {
+            Application.Current.Resources["BackgroundColor"] = new SolidColorBrush(Colors.LightBlue);
+
+            DarkThemeCommand = new RelayCommand(OnDarkThemeSelected);
+            
+            LightThemeCommand = new RelayCommand(OnLightThemeSelected);
+
             SelectProductCommand = new RelayCommand<string>(OnProductSelected);
 
             DecreaseQuantityCommand = new RelayCommand(OnDecreaseQuantity, CanDecreaseQuantity);
@@ -254,6 +271,22 @@ namespace WPF.Demo.MainWindow.ViewModel
             {
                 "Cement", "Rod", "Bali", "Pathor", "Taar"
             };
+        }
+
+        /// <summary>
+        /// Executes when the light theme is selected.
+        /// </summary>
+        private void OnLightThemeSelected()
+        {
+            Application.Current.Resources["BackgroundColor"] = new SolidColorBrush(Colors.LightBlue);
+        }
+
+        /// <summary>
+        /// Executes when the dark theme is selected.
+        /// </summary>
+        private void OnDarkThemeSelected()
+        {
+            Application.Current.Resources["BackgroundColor"] = new SolidColorBrush(Colors.DarkGray);
         }
 
         #endregion
