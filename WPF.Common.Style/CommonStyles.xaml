@@ -102,14 +102,10 @@
     </Style>
 
     <!-- Style for submit button control with validation of all other controls.-->
-    <Style x:Key="SubmitButtonStyle"
-                TargetType="Button">
-        <Setter Property="Background" Value="{StaticResource ERPYellowBrush}"/>
-        <Setter Property="Foreground" Value="{StaticResource ERPBlueBrush}"/>
-        <Setter Property="Template" Value="{StaticResource ButtonControlTemplate}"/>
+    <Style BasedOn="{StaticResource CommonButtonStyle}"
+           x:Key="SubmitButtonStyle"
+           TargetType="Button">
         <Setter Property="IsEnabled" Value="False"/>
-        <Setter Property="FontSize" Value="14"/>
-        
         <Style.Triggers>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
@@ -121,13 +117,6 @@
                 </MultiDataTrigger.Conditions>
                 <Setter Property="IsEnabled" Value="True"/>
             </MultiDataTrigger>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Background" Value="LightGray" />
-            </Trigger>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource ERPYellowBrush}"/>
-                <Setter Property="Background" Value="{StaticResource ERPBlueBrush}"/>
-            </Trigger>
         </Style.Triggers>
     </Style>
 
