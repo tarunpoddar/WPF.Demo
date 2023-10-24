@@ -6,6 +6,7 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
         xmlns:vm="clr-namespace:WPF.Demo.MainWindow.ViewModel"
         xmlns:mvvm="clr-namespace:WPF.Common.Mvvm;assembly=WPF.Common.Mvvm"
+        xmlns:local="clr-namespace:WPF.Demo"
         mc:Ignorable="d"
         Title="ERP Software" 
         Height="450" 
@@ -20,7 +21,7 @@
         <mvvm:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
         <mvvm:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -67,18 +68,21 @@
                 </Grid.RowDefinitions>
                 <TextBlock Grid.ColumnSpan="2"
                            HorizontalAlignment="Center"
-                           Text="Retail Billing"/>
+                           Text="Retail Billing"
+                           FontSize="25"/>
                 <TextBlock Grid.Column="0"
                            Grid.Row="1"
                            Margin="10"
                            HorizontalAlignment="Center"
-                           Text="Name"/>
+                           Text="Name"
+                           Style="{StaticResource CommonTextBlockStyle}"/>
                 <StackPanel Grid.Column="1"
                             Grid.Row="1"
                             Margin="10">
                     <TextBox Name="NameTextBox"
                              ToolTip="Enter customers name"
-                             Width="auto">
+                             Width="auto"
+                             FontSize="14">
                         <TextBox.Text>
                             <Binding Path="Name" 
                                  UpdateSourceTrigger="PropertyChanged"
@@ -95,7 +99,8 @@
                            Grid.Row="2"
                            Margin="10"
                            HorizontalAlignment="Center"
-                           Text="Gender"/>
+                           Text="Gender"
+                           Style="{StaticResource CommonTextBlockStyle}"/>
                 <StackPanel Grid.Column="1"
                             Grid.Row="2"
                             Margin="10" >
@@ -118,7 +123,8 @@
                            Grid.Row="3"
                            Margin="10"
                            HorizontalAlignment="Center"
-                           Text="Product"/>
+                           Text="Product"
+                           Style="{StaticResource CommonTextBlockStyle}"/>
                 <StackPanel Grid.Column="1"
                             Grid.Row="3"
                             Margin="10">
@@ -172,13 +178,15 @@
                            Margin="10"
                            Grid.Row="4"
                            HorizontalAlignment="Center"
-                           Text="Quantity"/>
+                           Text="Quantity"
+                           Style="{StaticResource CommonTextBlockStyle}"/>
                 <StackPanel Grid.Column="1"
                             Grid.Row="4"
                             Orientation="Horizontal"
                             Margin="10">
                     <Button Content="  -  "
-                            Command="{Binding DecreaseQuantityCommand}"/>
+                            Command="{Binding DecreaseQuantityCommand}"
+                            Style="{StaticResource CommonButtonStyle}"/>
                     <TextBox x:Name="QuantityTextBox"
                              Width="25"
                              TextAlignment="Center"
@@ -195,13 +203,15 @@
                         </TextBox.Text>
                     </TextBox>
                     <Button Content=" + "
-                            Command="{Binding IncreaseQuantityCommand}"/>
+                            Command="{Binding IncreaseQuantityCommand}"
+                            Style="{StaticResource CommonButtonStyle}"/>
                 </StackPanel>
                 <TextBlock Grid.Column="0"
                            Grid.Row="5"
                            Margin="10"
                            HorizontalAlignment="Center"
-                           Text="Mode of Payment"/>
+                           Text="Mode of Payment"
+                           Style="{StaticResource CommonTextBlockStyle}"/>
                 <StackPanel Grid.Column="1"
                             Grid.Row="5"
                             Margin="10">
@@ -222,13 +232,14 @@
                     </StackPanel>
                     <TextBlock Text="{Binding PaymentModeErrorText}" 
                                Foreground="Red"
-                               Visibility="{Binding IsPaymentModeErrorTextVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                               Visibility="{Binding IsPaymentModeErrorTextVisible, Converter={StaticResource BooleanToVisibilityConverter }}"/>
                 </StackPanel>
                 <TextBlock Grid.Column="0"
                            Grid.Row="6"
                            Margin="10"
                            HorizontalAlignment="Center"
-                           Text="Date of Purchase"/>
+                           Text="Date of Purchase"
+                           Style="{StaticResource CommonTextBlockStyle}"/>
                 <DatePicker x:Name="DateOfPurchaseDatePicker"
                             Grid.Row="6" 
                             Grid.Column="1"
@@ -246,14 +257,15 @@
                 </DatePicker>
             </Grid>
         </ScrollViewer>
-        <Button Grid.Row="2" 
-                Height="35" 
-                Width="50" 
-                Margin="10" 
-                VerticalAlignment="Top" 
-                Content="Submit"
-                Style="{StaticResource SubmitButtonStyle}"
-                Command="{Binding SubmitCommand}">
-        </Button>
+        <StackPanel Grid.Row="2" >
+            <Button Height="35" 
+                    Width="50" 
+                    Margin="10" 
+                    VerticalAlignment="Top" 
+                    Content="Submit"
+                    Style="{StaticResource SubmitButtonStyle}"
+                    Command="{Binding SubmitCommand}">      
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>

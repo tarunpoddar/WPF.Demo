@@ -1,6 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-   
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="CommonBrushes.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    
     <!-- Control template when validation fails.-->
     <ControlTemplate x:Key="ValidationErrorTemplate">
         <StackPanel>
@@ -9,7 +13,7 @@
                            Foreground="Red" />
         </StackPanel>
     </ControlTemplate>
-    
+
     <!-- Control template with margin for Quantity textbox when validation fails.-->
     <ControlTemplate x:Key="ValidationErrorTemplateWithMargin">
         <StackPanel>
@@ -23,9 +27,21 @@
     <ControlTemplate x:Key="NoErrorTemplate">
         <Border/>
     </ControlTemplate>
-    
+
+    <!-- Control template for button to override default background color on mouse over.-->
+    <ControlTemplate  x:Key="ButtonControlTemplate"
+                      TargetType="Button">
+        <Border Background="{TemplateBinding Background}" 
+                BorderThickness="1" 
+                BorderBrush="{StaticResource ERPBlueBrush}">
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Border>
+    </ControlTemplate>
+
     <!-- Style for all textbox controls with validation error control template.-->
     <Style TargetType="TextBox">
+        <Setter Property="BorderBrush" Value="{StaticResource ERPBlueBrush}"/>
+        <Setter Property="FontSize" Value="14"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsTextEntered}" Value="true">
                 <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}" />
@@ -38,6 +54,8 @@
 
     <!-- Style for all combobox controls with validation error control template.-->
     <Style TargetType="ComboBox">
+        <Setter Property="BorderBrush" Value="{StaticResource ERPBlueBrush}"/>
+        <Setter Property="FontSize" Value="14"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsTextEntered}" Value="true">
                 <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}" />
@@ -48,16 +66,50 @@
         </Style.Triggers>
     </Style>
 
+    <Style TargetType="RadioButton">
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+
     <!-- Style for date picker control with validation error control template.-->
     <Style TargetType="DatePicker">
+        <Setter Property="BorderBrush" Value="{StaticResource ERPBlueBrush}"/>
+        <Setter Property="FontSize" Value="14"/>
         <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}" />
+    </Style>
+
+    <!-- Style for other button controls.-->
+    <Style x:Key="CommonButtonStyle"
+             TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource ERPYellowBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource ERPBlueBrush}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Template" Value="{StaticResource ButtonControlTemplate}"/>
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="LightGray" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource ERPYellowBrush}"/>
+                <Setter Property="Background" Value="{StaticResource ERPBlueBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Style for text block controls.-->
+    <Style x:Key="CommonTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource ERPBlueBrush}"/>
+        <Setter Property="FontSize" Value="14"/>
     </Style>
 
     <!-- Style for submit button control with validation of all other controls.-->
     <Style x:Key="SubmitButtonStyle"
                 TargetType="Button">
-        <Setter Property="IsEnabled" 
-                            Value="False"/>
+        <Setter Property="Background" Value="{StaticResource ERPYellowBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource ERPBlueBrush}"/>
+        <Setter Property="Template" Value="{StaticResource ButtonControlTemplate}"/>
+        <Setter Property="IsEnabled" Value="False"/>
+        <Setter Property="FontSize" Value="14"/>
+        
         <Style.Triggers>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
@@ -67,9 +119,16 @@
                     <Condition Binding="{Binding Path=(Validation.HasError), ElementName=ProductTextBox}" Value="False"/>
                     <Condition Binding="{Binding Path=(Validation.HasError), ElementName=DateOfPurchaseDatePicker}" Value="False"/>
                 </MultiDataTrigger.Conditions>
-                <Setter Property="IsEnabled" 
-                                    Value="True"/>
+                <Setter Property="IsEnabled" Value="True"/>
             </MultiDataTrigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="LightGray" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource ERPYellowBrush}"/>
+                <Setter Property="Background" Value="{StaticResource ERPBlueBrush}"/>
+            </Trigger>
         </Style.Triggers>
     </Style>
+
 </ResourceDictionary>
